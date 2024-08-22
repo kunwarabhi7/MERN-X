@@ -4,6 +4,9 @@ import bcrypt from 'bcryptjs'
 export const signup =async (req, res) => {
 try {
    const {fullName,username,email,password} = req.body;
+   if (!fullName || !username || !email || !password) {
+      return res.status(400).json({error: 'Please provide all fields'});
+   }
    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
    if(!emailRegex.test(email)){
       return res.status(400).json({error: 'Invalid email format'});
@@ -54,8 +57,32 @@ coverImg:newUser.coverImg
 } }
 
  export const login =async (req, res) => {
-    res.json({
-       message: 'Signup complete'})
+  try {
+   const {username,password} = req.body;
+   if(!username || !password){
+      return res.status(400).json({error: 'Please provide both username and password'});
+   }
+   const user = await User.findOne({username});
+   const isPasswordCorrect = await bcrypt.compare(password, user.password);
+   if(!isPasswordCorrect || !user){
+return res.status(400).json({error: 'Invalid credentials'});      }
+
+generateTokenAndSecret(user._id,res)
+res.status(200).json({
+   _id:user._id,
+   fullName:user.fullName,
+   username: user.username,
+   email: user.email,
+   followers:user.followers,
+   followings:user.followings,
+   profileImg:user.profileImg,
+   coverImg:user.coverImg
+})
+
+  } catch (error) {
+   console.log('Error in signup User',error.message)
+   res.status(500).json({error: 'Internal server error'})
+  }
  }
 
  export const logout =async (req, res) => {
