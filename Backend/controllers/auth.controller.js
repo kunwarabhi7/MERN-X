@@ -80,12 +80,18 @@ res.status(200).json({
 })
 
   } catch (error) {
-   console.log('Error in signup User',error.message)
+   console.log('Error in login User',error.message)
    res.status(500).json({error: 'Internal server error'})
   }
  }
 
  export const logout =async (req, res) => {
-    res.json({
-       message: 'Signup complete'})
+   try {
+      res.cookie('jwt', '', {maxAge: 0});
+      res.status(200).json({"message":"User Logout Successfully"})
+   } catch (error) {
+      console.log('Error in login User',error.message)
+   res.status(500).json({error: 'Internal server error'})
+  
+   }
  }
