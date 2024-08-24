@@ -60,7 +60,7 @@ coverImg:newUser.coverImg
   try {
    const {username,password} = req.body;
    if(!username || !password){
-      return res.status(400).json({error: 'Please provide both username and password'});
+      return res.status(400).json({error: 'Please  provide both username and password'});
    }
    const user = await User.findOne({username});
    const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -70,7 +70,7 @@ return res.status(400).json({error: 'Invalid credentials'});      }
 generateTokenAndSecret(user._id,res)
 res.status(200).json({
    _id:user._id,
-   fullName:user.fullName,
+   fullName:user.fullName, 
    username: user.username,
    email: user.email,
    followers:user.followers,
