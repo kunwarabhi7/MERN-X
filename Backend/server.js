@@ -5,6 +5,7 @@ import cors from 'cors';
 import { authRouter } from './routes/auth.routes.js';
 import mongoDbConnect from './db/connectMongodb.js';
 import cookieParser from 'cookie-parser';
+import { userRouter } from './routes/user.routes.js';
 
 const PORT = process.env.PORT || 5000;
 
@@ -23,6 +24,7 @@ app.get("/",(req,res)=>{
 })
 
 app.use('/api/auth',authRouter);
+app.use("/api/users",userRouter);
 
 app.listen(PORT,()=>{
     console.log(`Backend server is running ${PORT}`)
